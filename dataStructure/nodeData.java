@@ -1,5 +1,7 @@
 package dataStructure;
 
+import java.util.HashMap;
+
 import utils.Point3D;
 
 public class nodeData implements node_data
@@ -10,6 +12,10 @@ public class nodeData implements node_data
 	private double weight; 
 	private String info;
 	private int tag;
+	HashMap<Integer, node_data>  tN  = new HashMap<Integer, node_data>(); //to neighbor
+	HashMap<Integer, node_data> fN = new HashMap<Integer, node_data>(); //from neighbor
+	HashMap<Integer, edge_data>  tE  = new HashMap<Integer, edge_data>(); //to edge
+	HashMap<Integer, edge_data> fE = new HashMap<Integer, edge_data>(); //from edge
 
 	public nodeData() 
 	{

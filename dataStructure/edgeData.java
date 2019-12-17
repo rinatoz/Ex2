@@ -8,6 +8,14 @@ public class edgeData implements edge_data
 	private String info;
 	private int tag;
 
+	public edgeData(int s,int d,double w) 
+	{
+		this.src=s;
+		this.dest=d;
+		this.weight=w;
+		this.info="";
+		this.tag=0;
+	}
 	public edgeData(int s,int d,double w,String i,int t) 
 	{
 		this.src=s;
@@ -56,10 +64,7 @@ public class edgeData implements edge_data
 	@Override
 	public void setTag(int t) 
 	{
-		if(t>=0&&t<=2)//0=white,1=gray,2=black. if it not one of the tag stay the same
-		{
 			this.tag=t;
-		}
 	}
 
 }
