@@ -12,13 +12,6 @@ public class nodeData implements node_data
 	private double weight; 
 	private String info;
 	private int tag;
-	
-	//////// ****as a pointers to another nodes which consider edge with this node.***//////////////////
-	
-	HashMap<Integer, node_data>  tN  = new HashMap<Integer, node_data>(); //to neighbor
-	HashMap<Integer, node_data> fN = new HashMap<Integer, node_data>(); //from neighbor to this node
-	HashMap<Integer, edge_data>  tE  = new HashMap<Integer, edge_data>(); //to edge 
-	HashMap<Integer, edge_data> fE = new HashMap<Integer, edge_data>(); //from edge to this node
 
 	public nodeData() 
 	{

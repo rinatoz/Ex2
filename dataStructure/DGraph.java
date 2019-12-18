@@ -9,13 +9,13 @@ import java.util.Map.Entry;
 
 public class DGraph implements graph{
 
-	   HashMap<Integer,node_data> v; 
-	   ArrayList<edge_data> e;
+	  HashMap<Integer,node_data> v; 
+	  HashMap<Integer,HashMap<Integer,edge_data>> e;
 	   
     public DGraph() 
     {
 	 v=new HashMap<Integer,node_data>();
-	 e=new ArrayList<edge_data>();
+	 e=new HashMap<Integer, HashMap<Integer,edge_data>>();
     }
     
 	@Override
@@ -32,18 +32,23 @@ public class DGraph implements graph{
 	@Override
 	public edge_data getEdge(int src, int dest)
 	{
-		nodeData p = (nodeData)this.v.get(src);
-		if (p.tE.get(dest) != null)
-		{ 
-			return p.tE.get(dest); 
-		}
-		return null;
+		
+     try
+     {
+    	 edge_data e= this.e.get(src).get(dest);
+    	 return e;
+     }
+     catch (Exception e)
+     {
+    	 throw new RuntimeException ("src or dest nodes not exist");
+     }
+     
 	}
 
 	@Override
 	public void addNode(node_data n)
 	{ 
-		if (!this.v.containsKey(n.getKey()))
+		if(!this.v.containsKey(n.getKey()))
 		{
 		this.v.put(n.getKey(),n); 
 		}
@@ -54,33 +59,51 @@ public class DGraph implements graph{
 	{
 		try
 		{
-		nodeData s = (nodeData)this.v.get(src);
-		nodeData d = (nodeData)this.v.get(dest);
-		edgeData e = new edgeData(src, dest, w);
-		this.e.add(e);
-		//s.tN.put(dest, d); 
-	//	d.tN.put(src,s);
-		//s.tE.put(dest,e);
-		//d.fE.put(src, e);
+			this.v.get(src);
+			this.v.get(dest);
+			edgeData e = new edgeData(src, dest, w);
+			HashMap<Integer,edge_data> inside=new HashMap<Integer,edge_data>();
+			edge_data edg=new edgeData(src,dest,w);
+			inside.put(dest,edg);
+			this.e.put(src,inside);
 		}
 		catch (Exception e)
 		{
 			throw new RuntimeException ("src or dest not found at the nodes list");
 		}
+
+
 	}
 
 	@Override
 	public Collection<node_data> getV() 
 	{
-		return this.v.values();
+		Collection<node_data> v1=(Collection<node_data>) this.v;     
+		return (Collection<node_data>)v1;
+		
 	}
 
 
 	@Override
 	public Collection<edge_data> getE(int node_id)
 	{
+		try
+		{
 		node_data n = this.v.get(node_id);
-		return (Collection<edge_data>)((nodeData)n).tE;
+		try
+		{
+		Collection<edge_data> e1=(Collection<edge_data>) this.e.get(node_id);     
+		return (Collection<edge_data>)e1;
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException("node_id havn't edges");
+		}
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException("node_id not exitst");
+		}
 	}
 
 	@Override
@@ -97,18 +120,9 @@ public class DGraph implements graph{
 		while (iterator.hasNext())
 		{
 			edgeData edg = (edgeData) iterator.next();
-			int s=edg.getSrc();
+			int s=key;
 			int d=edg.getDest();
-			removeEdge(s,d); //calling the next function
-		}
-		Collection<edge_data> s= (Collection<edge_data>) n.fE;
-		Iterator<edge_data> iterator1 = s.iterator();
-		while (iterator1.hasNext())
-		{
-			edgeData edg = (edgeData) iterator1.next();
-			int sr=edg.getSrc();
-			int d=edg.getDest();
-			removeEdge(sr,d); //calling the next function
+			removeEdge(s,d); 
 		}
 		
 		this.v.remove(key);
@@ -118,26 +132,16 @@ public class DGraph implements graph{
 	@Override
 	public edge_data removeEdge(int src, int dest) 
 	{
-		nodeData s = (nodeData)this.v.get(src);
-		nodeData d = (nodeData)this.v.get(dest);
-		if (s.tE.get(dest) == null)
+		try
 		{
-			return null; 
-		}
-		if(s.tN.get(dest)!=null)
-		{
-			s.tN.remove(dest);
-			d.fN.remove(src);
-		}
-		edgeData edge = (edgeData)s.tN.get(dest); 
-		s.tE.remove(dest);
-		d.tE.remove(src);
-		for (int i=0; i<this.e.size(); i++) {
-			if (edge.equals(this.e.get(i))) { 
-				this.e.remove(i);
-			}
-		}
+        edge_data edge=this.getEdge(src, dest);
+        this.e.get(src).remove(dest);
 		return edge;
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException("src or dest not exist");
+		}
 	}
 
 	@Override
@@ -149,7 +153,7 @@ public class DGraph implements graph{
 	@Override
 	public int edgeSize() 
 	{
-		int i=this.e.size();
+		int i=this.e.size() ;
 		return i;
 	}
 
