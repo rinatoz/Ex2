@@ -4,28 +4,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class DGraph implements graph{
 
 	   HashMap<Integer,node_data> v; 
-	   ArrayList<edgeData> e;
+	   ArrayList<edge_data> e;
 	   
     public DGraph() 
     {
 	 v=new HashMap<Integer,node_data>();
-	 e=new ArrayList<edgeData>();
+	 e=new ArrayList<edge_data>();
     }
     
 	@Override
 	public node_data getNode(int key) 
 	{
-		if(v.containsKey(key))
+		if(v.containsKey(key)) //check if this hashmap contains this key
 		{
 			return v.get(key);
 		}
 		else
-			return null;
+			return null;   
 	}  
 
 	@Override
@@ -41,21 +42,31 @@ public class DGraph implements graph{
 
 	@Override
 	public void addNode(node_data n)
-	{
-		this.v.put(n.getKey(),n); //if already exist????????
+	{ 
+		if (!this.v.containsKey(n.getKey()))
+		{
+		this.v.put(n.getKey(),n); 
+		}
 	}
 
 	@Override
-	public void connect(int src, int dest, double w) 
+	public void connect(int src, int dest, double w) //check cases that src and dest not at the nodes list
 	{
+		try
+		{
 		nodeData s = (nodeData)this.v.get(src);
 		nodeData d = (nodeData)this.v.get(dest);
 		edgeData e = new edgeData(src, dest, w);
 		this.e.add(e);
-		s.tN.put(dest, d);	
-		d.tN.put(src,s);
-		s.tE.put(dest,e);
-		d.fE.put(src, e);
+		//s.tN.put(dest, d); 
+	//	d.tN.put(src,s);
+		//s.tE.put(dest,e);
+		//d.fE.put(src, e);
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException ("src or dest not found at the nodes list");
+		}
 	}
 
 	@Override
@@ -81,7 +92,7 @@ public class DGraph implements graph{
 		}
 
 		nodeData n = (nodeData)(this.v.get(key));
-		Collection<edge_data> delete = getE(key);
+		Collection<edge_data> delete = this.getE(key);
 		Iterator<edge_data> iterator = delete.iterator();
 		while (iterator.hasNext())
 		{
@@ -99,6 +110,7 @@ public class DGraph implements graph{
 			int d=edg.getDest();
 			removeEdge(sr,d); //calling the next function
 		}
+		
 		this.v.remove(key);
 		return n;
 	}
@@ -117,11 +129,11 @@ public class DGraph implements graph{
 			s.tN.remove(dest);
 			d.fN.remove(src);
 		}
-		edge_data edge = (edgeData)s.tN.get(dest); 
+		edgeData edge = (edgeData)s.tN.get(dest); 
 		s.tE.remove(dest);
 		d.tE.remove(src);
 		for (int i=0; i<this.e.size(); i++) {
-			if (this.e.get(i)==edge) { 
+			if (edge.equals(this.e.get(i))) { 
 				this.e.remove(i);
 			}
 		}
@@ -150,6 +162,36 @@ public class DGraph implements graph{
 	
 	//**********************************
 	
+	private String tostringNodes()
+	{
+		String s="nodes:";
+		Iterator<Entry<Integer, node_data>> it=this.v.entrySet().iterator();
+		while (it.hasNext())
+		{
+			  nodeData d= (nodeData) it.next().getValue();
+			  s=s+d.toString();
+		}
+	    
+		return s;
+	}
+	private String tostringEdge()
+	{
+		String s="edges:";
+        for (int i=0;i<this.edgeSize();i++)
+        {
+        	s=s+this.e.get(i).toString();
+        }
+	    
+		return s;
+	}
+	public String toString()
+	{
+		String s="";
+		String nodes=tostringNodes();
+		String edges=tostringEdge();
+		s=s+"["+nodes.toString()+edges.toString()+"]";
+		return s;
+	}
 
 
 }

@@ -1,5 +1,7 @@
 package dataStructure;
 
+import java.util.Iterator;
+
 public class edgeData implements edge_data
 {
 	private int src;
@@ -23,6 +25,22 @@ public class edgeData implements edge_data
 		this.weight=w;
 		this.info=i;
 		this.tag=t;
+	}
+	
+	public boolean equals (edge_data a)
+	{
+		if (this.src!=a.getSrc())
+			return false;
+		if (this.dest!=a.getDest())
+			return false;
+		if (this.weight!=a.getWeight())
+			return false;
+		if (!this.info.equals(a.getInfo()))
+			return false;
+		if (this.tag!=a.getTag())
+			return false;
+		
+		return true;
 	}
 
 	@Override
@@ -66,5 +84,20 @@ public class edgeData implements edge_data
 	{
 			this.tag=t;
 	}
+	///////////////////////////////////////////////
+	public String toString()
+	{
+		String s="";
+		if(this.info.isEmpty())
+		{
+			s=s+"(src:"+ this.src+",dest:"+this.dest+",weight:"+this.weight+",info:no information yet"+",tag:"+this.tag+")";
+		}
+		else
+		{
+	    s=s+"(src:"+ this.src+",dest:"+this.dest+",weight:"+this.weight+",info:"+this.info.toString()+",tag:"+this.tag+")";
+		}
+		return s;
+	}
+	
 
 }

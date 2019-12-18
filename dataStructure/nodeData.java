@@ -12,10 +12,13 @@ public class nodeData implements node_data
 	private double weight; 
 	private String info;
 	private int tag;
+	
+	//////// ****as a pointers to another nodes which consider edge with this node.***//////////////////
+	
 	HashMap<Integer, node_data>  tN  = new HashMap<Integer, node_data>(); //to neighbor
-	HashMap<Integer, node_data> fN = new HashMap<Integer, node_data>(); //from neighbor
-	HashMap<Integer, edge_data>  tE  = new HashMap<Integer, edge_data>(); //to edge
-	HashMap<Integer, edge_data> fE = new HashMap<Integer, edge_data>(); //from edge
+	HashMap<Integer, node_data> fN = new HashMap<Integer, node_data>(); //from neighbor to this node
+	HashMap<Integer, edge_data>  tE  = new HashMap<Integer, edge_data>(); //to edge 
+	HashMap<Integer, edge_data> fE = new HashMap<Integer, edge_data>(); //from edge to this node
 
 	public nodeData() 
 	{
@@ -89,11 +92,23 @@ public class nodeData implements node_data
 	@Override
 	public void setTag(int t) 
 	{
-		if(t>=0&&t<=2)//0=white,1=gray,2=black. if it not one of the tag stay the same
-		{
 			this.tag=t;
-		}
-		
 	}
+	/////////////////////////////////////////////////////////////////
+	public String toString()
+	{
+		String s="";
+		if(this.info.isEmpty())
+		{
+			s=s+"(location:" + this.location.toString()+",weight:"+this.weight+",info:no information yet"+",tag:"+this.tag+")";
+		}
+		else
+		{
+		s=s+"(location:" + this.location.toString()+",weight:"+this.weight+",info:"+ this.info.toString()+ ",tag:"+this.tag+")";
+		}
+		return s;
+	}
+
+
 
 }
