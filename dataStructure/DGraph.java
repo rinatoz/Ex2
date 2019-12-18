@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 public class DGraph implements graph{
 
 	  HashMap<Integer,node_data> v; 
-	  HashMap<Integer,HashMap<Integer,edge_data>> e;
+      HashMap<Integer,HashMap<Integer,edge_data>> e;
 	   
     public DGraph() 
     {
@@ -26,7 +26,9 @@ public class DGraph implements graph{
 			return v.get(key);
 		}
 		else
-			return null;   
+		{
+			throw new RuntimeException ("this key not exist") ;  
+		}
 	}  
 
 	@Override
@@ -35,8 +37,7 @@ public class DGraph implements graph{
 		
      try
      {
-    	 edge_data e= this.e.get(src).get(dest);
-    	 return e;
+    	return this.e.get(src).get(dest);    	
      }
      catch (Exception e)
      {
@@ -57,29 +58,34 @@ public class DGraph implements graph{
 	@Override
 	public void connect(int src, int dest, double w) //check cases that src and dest not at the nodes list
 	{
-		try
+		if(src!=dest&&w>=0)//check if the edge is between different vertices and the weight is positive 
 		{
-			this.v.get(src);
-			this.v.get(dest);
-			edgeData e = new edgeData(src, dest, w);
-			HashMap<Integer,edge_data> inside=new HashMap<Integer,edge_data>();
-			edge_data edg=new edgeData(src,dest,w);
-			inside.put(dest,edg);
-			this.e.put(src,inside);
+			if(this.v.containsKey(src)&&this.v.containsKey(dest))//check if there is vertices src dest
+			{
+				if(!this.e.containsKey(src)) //check if there is a hashmap for key src
+				{
+					HashMap<Integer, edge_data> edgesVer=new HashMap<Integer,edge_data> ();
+					this.e.put(src, edgesVer);
+				}
+				if(!this.e.get(src).containsKey(dest))//check if the edge is already exist
+				{
+					edge_data edge=new edgeData(src,dest,w,null,0);
+					this.e.get(src).put(dest, edge);
+				}
+				
+			}
+			else
+				throw new RuntimeException ("one of the nodes not exist");
+			
 		}
-		catch (Exception e)
-		{
-			throw new RuntimeException ("src or dest not found at the nodes list");
-		}
-
-
+		else
+			throw new RuntimeException ("the nodess must be diffrent");
 	}
 
 	@Override
 	public Collection<node_data> getV() 
 	{
-		Collection<node_data> v1=(Collection<node_data>) this.v;     
-		return (Collection<node_data>)v1;
+		return this.v.values();
 		
 	}
 
@@ -109,39 +115,53 @@ public class DGraph implements graph{
 	@Override
 	public node_data removeNode(int key) 
 	{
-		if (this.v.get(key)==null) 
-		{ 
-			return null;  //this key isnt exist
-		}
-
-		nodeData n = (nodeData)(this.v.get(key));
-		Collection<edge_data> delete = this.getE(key);
-		Iterator<edge_data> iterator = delete.iterator();
-		while (iterator.hasNext())
+		int keyTemp;
+		for (Entry<Integer, node_data> entry : this.v.entrySet())
 		{
-			edgeData edg = (edgeData) iterator.next();
-			int s=key;
-			int d=edg.getDest();
-			removeEdge(s,d); 
+			keyTemp=entry.getKey();
+			if(keyTemp!=key&&this.e.containsKey(keyTemp) &&this.e.get(keyTemp).containsKey(key))
+			{
+				if (this.e.get(keyTemp).size()==1)
+				{
+					this.e.remove(keyTemp);
+				}
+				else
+				{
+				this.e.get(keyTemp).remove(key);
+				}
+			}
+			if(keyTemp==key&&e.containsKey(key))
+			{
+				this.e.remove(key);
+			}
 		}
-		
-		this.v.remove(key);
-		return n;
+        
+		return this.v.remove(key);
 	}
 
 	@Override
 	public edge_data removeEdge(int src, int dest) 
 	{
-		try
+		if(this.v.containsKey(src)&&this.v.containsKey(dest))
 		{
-        edge_data edge=this.getEdge(src, dest);
-        this.e.get(src).remove(dest);
-		return edge;
+			if(this.v.containsKey(src)&&this.e.get(src).containsKey(dest))
+			{
+				if (e.get(src).size()==1)
+				{
+					edge_data edge=this.e.get(src).get(dest);
+					 this.e.remove(src);
+					 return edge;
+				}
+				else
+				{
+				return this.e.get(src).remove(dest);
+				}
+			}
+			else 
+				throw new RuntimeException ("this edge is not exist");
 		}
-		catch (Exception e)
-		{
-			throw new RuntimeException("src or dest not exist");
-		}
+		else
+			throw new RuntimeException ("one of the nodes not exist");
 	}
 
 	@Override
