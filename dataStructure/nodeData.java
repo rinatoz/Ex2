@@ -22,6 +22,14 @@ public class nodeData implements node_data
 		this.tag=0;
 		keyI++;
 	}
+	public nodeData(int key) 
+	{
+		this.key=key;
+		this.location=null;
+		this.weight=0;
+		this.info=null;
+		this.tag=0;
+	}
 	public nodeData(Point3D p,double w,String i,int t) 
 	{
 		this.key=keyI;
@@ -93,11 +101,11 @@ public class nodeData implements node_data
 		String s="";
 		if(this.info.isEmpty())
 		{
-			s=s+"(location:" + this.location.toString()+",weight:"+this.weight+",info:no information yet"+",tag:"+this.tag+")";
+			s=s+"(key:"+this.key+",location:" + this.location.toString()+",weight:"+this.weight+",info:no information yet"+",tag:"+this.tag+")";
 		}
 		else
 		{
-		s=s+"(location:" + this.location.toString()+",weight:"+this.weight+",info:"+ this.info.toString()+ ",tag:"+this.tag+")";
+		s=s+"(key:"+this.key+",location:" + this.location.toString()+",weight:"+this.weight+",info:"+ this.info.toString()+ ",tag:"+this.tag+")";
 		}
 		return s;
 	}

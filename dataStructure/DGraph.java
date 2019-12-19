@@ -69,13 +69,15 @@ public class DGraph implements graph{
 				}
 				if(!this.e.get(src).containsKey(dest))//check if the edge is already exist
 				{
-					edge_data edge=new edgeData(src,dest,w,null,0);
-					this.e.get(src).put(dest, edge);
+					edge_data edge=new edgeData(src,dest,w,"",0);
+					this.e.get(src).put(dest,edge);
 				}
 				
 			}
 			else
+			{
 				throw new RuntimeException ("one of the nodes not exist");
+			}
 			
 		}
 		else
@@ -198,14 +200,32 @@ public class DGraph implements graph{
 	    
 		return s;
 	}
-	private String tostringEdge()
+	public String tostringEdge()
 	{
 		String s="edges:";
-        for (int i=0;i<this.edgeSize();i++)
-        {
-        	s=s+this.e.get(i).toString();
-        }
-	    
+		int keyTemp;
+		for (Entry<Integer, node_data> entry : this.v.entrySet())
+		{
+			keyTemp=entry.getKey();
+			if (this.e.containsKey(keyTemp))
+			{
+			Iterator<Entry<Integer, edge_data>> it=this.e.get(keyTemp).entrySet().iterator();
+			while (it.hasNext())
+			{
+				if(this.e.get(keyTemp).isEmpty()==false)
+				{
+				  edgeData ed= (edgeData) it.next().getValue();
+
+				  s=s+ed.toString();
+				}
+			}
+			}
+			        
+		}
+		if (s.equals("edges:"))
+		{
+			s=s+"(not edges yet)";
+		}
 		return s;
 	}
 	public String toString()

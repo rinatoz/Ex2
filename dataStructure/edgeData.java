@@ -88,7 +88,8 @@ public class edgeData implements edge_data
 	public String toString()
 	{
 		String s="";
-		if(this.info.isEmpty())
+
+		if(this.info.length()==0)
 		{
 			s=s+"(src:"+ this.src+",dest:"+this.dest+",weight:"+this.weight+",info:no information yet"+",tag:"+this.tag+")";
 		}
@@ -97,6 +98,7 @@ public class edgeData implements edge_data
 	    s=s+"(src:"+ this.src+",dest:"+this.dest+",weight:"+this.weight+",info:"+this.info.toString()+",tag:"+this.tag+")";
 		}
 		return s;
+
 	}
 	
 
