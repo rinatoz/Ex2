@@ -1,27 +1,35 @@
 package dataStructure;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 public class DGraph implements graph{
 
 	  HashMap<Integer,node_data> v; 
       HashMap<Integer,HashMap<Integer,edge_data>> e;
+      private static int MC = 0;
 	   
     public DGraph() 
     {
 	 v=new HashMap<Integer,node_data>();
 	 e=new HashMap<Integer, HashMap<Integer,edge_data>>();
     }
+    public DGraph (	Collection<node_data> nodes,Collection<edge_data> edges)
+    {
+    	this.v = new HashMap<Integer, node_data>();
+		this.e = new HashMap<Integer, HashMap<Integer, edge_data>>();
+		for(node_data n : nodes)
+			addNode(n);
+		for(edge_data e : edges)
+			connect(e.getSrc(), e.getDest(), e.getWeight());
+    }
     
 	@Override
 	public node_data getNode(int key) 
 	{
-		if(v.containsKey(key)) //check if this hashmap contains this key
+		if(v.containsKey(key)) 
 		{
 			return v.get(key);
 		}
@@ -53,6 +61,7 @@ public class DGraph implements graph{
 		{
 		this.v.put(n.getKey(),n); 
 		}
+		MC++;
 	}
 
 	@Override
@@ -72,7 +81,7 @@ public class DGraph implements graph{
 					edge_data edge=new edgeData(src,dest,w,"",0);
 					this.e.get(src).put(dest,edge);
 				}
-				
+				MC++;	
 			}
 			else
 			{
@@ -97,20 +106,11 @@ public class DGraph implements graph{
 	{
 		try
 		{
-		node_data n = this.v.get(node_id);
-		try
-		{
-		Collection<edge_data> e1=(Collection<edge_data>) this.e.get(node_id);     
-		return (Collection<edge_data>)e1;
+		return e.get(node_id).values();
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException("node_id havn't edges");
-		}
-		}
-		catch (Exception e)
-		{
-			throw new RuntimeException("node_id not exitst");
+			throw new RuntimeException ("no edges");
 		}
 	}
 
@@ -137,6 +137,7 @@ public class DGraph implements graph{
 				this.e.remove(key);
 			}
 		}
+		MC++;
         
 		return this.v.remove(key);
 	}
@@ -146,6 +147,7 @@ public class DGraph implements graph{
 	{
 		if(this.v.containsKey(src)&&this.v.containsKey(dest))
 		{
+			MC++;
 			if(this.v.containsKey(src)&&this.e.get(src).containsKey(dest))
 			{
 				if (e.get(src).size()==1)
@@ -158,6 +160,7 @@ public class DGraph implements graph{
 				{
 				return this.e.get(src).remove(dest);
 				}
+				
 			}
 			else 
 				throw new RuntimeException ("this edge is not exist");
@@ -183,7 +186,7 @@ public class DGraph implements graph{
 	public int getMC() 
 	{
 		
-		return 0;
+		return MC;
 	}
 	
 	//**********************************

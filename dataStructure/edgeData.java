@@ -1,6 +1,5 @@
 package dataStructure;
 
-import java.util.Iterator;
 
 public class edgeData implements edge_data
 {
