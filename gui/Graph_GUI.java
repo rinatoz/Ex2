@@ -64,17 +64,10 @@ public class Graph_GUI extends Graph_Algo
                 double dX = x1-x0;
                 double dY = y1-y0;
                 double m = dY/dX;
-          
+                double stepX=0.07*(x1-x0);
                 StdDraw.setPenColor(StdDraw.YELLOW);
                 StdDraw.setPenRadius(0.015);
-                if (x1>x0)
-                {
-                StdDraw.point(x1-1,m+y1);
-                }
-                else
-                {
-                	StdDraw.point(x1+1,m+y1);
-                }
+                StdDraw.point(x1-stepX,-m*stepX+y1);
                 StdDraw.setPenColor(StdDraw.BLACK);
                 StdDraw.setPenRadius(0.004);
             }
@@ -105,8 +98,8 @@ public class Graph_GUI extends Graph_Algo
     {
 		Point3D p1 = new Point3D(10, 20, 0);
 		Point3D p2 = new Point3D(21, 41, 0);
-		Point3D p3 = new Point3D(62, 78, 2);
-		Point3D p4 = new Point3D(45, 34, 0);
+		Point3D p3 = new Point3D(62, 45, 2);
+		Point3D p4 = new Point3D(45, 45, 0);
 		Point3D p5 = new Point3D(48, 75, 0);
 		Point3D p6 = new Point3D(67, 81, 2);
 		nodeData n1 = new nodeData(p1,5,"",0);
@@ -124,9 +117,9 @@ public class Graph_GUI extends Graph_Algo
 		g.addNode(n6);
 		g.connect(n1.getKey(), n4.getKey(), 10);
 		g.connect(n1.getKey(), n3.getKey(), 1);
-		g.connect(n1.getKey(), n2.getKey(), 3);
+		g.connect(n2.getKey(), n1.getKey(), 3);
 		g.connect(n3.getKey(), n4.getKey(), 4);
-	//	g.connect(n1.getKey(), n4.getKey(), 6);
+		g.connect(n5.getKey(), n6.getKey(), 6);
 	
 		Graph_Algo a=new Graph_Algo();
 		a.init(g);
