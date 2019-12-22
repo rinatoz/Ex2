@@ -3,14 +3,13 @@ package algorithms;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.regex.Pattern;
 
 import dataStructure.DGraph;
@@ -29,20 +28,20 @@ import utils.Point3D;
 public class Graph_Algo implements graph_algorithms{
 
 	public graph g;
-	
-	public Graph_Algo()
+		
+	public Graph_Algo()  //V
 	{
 		this.g=new DGraph();
 	}
 	
 	@Override
-	public void init(graph g)
+	public void init(graph g) //V
 	{
-		this.g=g;		
+	this.g=g;	
 	}
 	
 	@Override
-	public void init(String file_name)
+	public void init(String file_name) //V
 	{
 	       String line = "";
 	       int i=0;
@@ -50,6 +49,12 @@ public class Graph_Algo implements graph_algorithms{
 	        {
 	        	BufferedReader br = new BufferedReader(new FileReader(file_name));
 	        	line=br.readLine();
+	        	if (line.toString().equals("[nodes:(not nodes yet)edges:(not edges yet)]")) //empty graph
+	        	{
+	        		this.g=new DGraph();
+	        	}
+	        	else
+	        	{
 	            String[] afterread = line.split("]"); //graph
 	            
 	            while (i<afterread.length)
@@ -75,7 +80,9 @@ public class Graph_Algo implements graph_algorithms{
 	             this.g=e;
 	             
                 i++;
-	            }	             
+	            }	
+	        	}
+	            br.close();
 	          
 	        } 
 	        catch (Exception e) 
@@ -86,7 +93,7 @@ public class Graph_Algo implements graph_algorithms{
 	}
 
 	@Override
-	public void save(String file_name) 
+	public void save(String file_name) //V
 	{
 		try {
 			File f=new File(file_name);
@@ -139,17 +146,80 @@ public class Graph_Algo implements graph_algorithms{
 	@Override
 	public double shortestPathDist(int src, int dest)
 	{
+		node_data d=this.g.getNode(dest);
 
-		return 0;
+			Collection<node_data> vertices = this.g.getV(); // collection of nodes
+			Queue<node_data> q = new LinkedList<>();
+			try
+			{
+			for (node_data node : vertices) 
+			{
+				if (node.getKey() == src)
+				{ // start point of path
+					node.setWeight(0);     // weight of source is 0.
+				} 
+				else 
+				{
+					node.setWeight(Double.POSITIVE_INFINITY); // note infinity the other nodes
+				}
+				q.add(node); 
+			}
+			while (!q.isEmpty()) 
+			{
+				node_data tmp_src = q.poll();
+				try {
+				Collection<edge_data> edgesTmp = this.g.getE(tmp_src.getKey());
+					for (edge_data edge : edgesTmp) 
+					{
+						node_data tmp_dst = this.g.getNode(edge.getDest());
+							double tmp_w = tmp_src.getWeight() + edge.getWeight();
+							if (tmp_dst.getWeight() > tmp_w)
+							{
+								tmp_dst.setWeight(tmp_w);
+								tmp_dst.setInfo(""+tmp_src.getKey());
+							}				
+					}
+				}
+				catch (Exception e) {}
+			}
+			if (d.getWeight()==Double.POSITIVE_INFINITY)
+				throw new RuntimeException ("there is no path to this dest from this src");
+				
+			return d.getWeight();
+			}
+			catch (Exception e) {throw new RuntimeException ("there is no path to this dest from this src");}
+
 	}
 
-	@Override
-	public List<node_data> shortestPath(int src, int dest) 
+//	@Override
+	public List<node_data> shortestPath(int src, int dest) //V
 	{
+		shortestPathDist(src,dest);
+		ArrayList<node_data> first=new ArrayList<>();
+		ArrayList<node_data> sorted=new ArrayList<>();
+		first.add(this.g.getNode(dest));
+		int t=dest;
+		while(this.g.getNode(t).getKey()!=src)
+		{
+			if(this.g.getNode(t).getInfo().equals(""))
+				return null;
+			int next=Integer.parseInt(this.g.getNode(t).getInfo());
+			first.add(this.g.getNode(next));
+			t=next;
+		}
+		
+		for (int i=first.size()-1;i>=0;i--)
+		{
+			sorted.add(first.get(i));
+		}
 
-	  return null;
+		for (int i=1;i<sorted.size();i++)
+		{
+			this.g.getEdge(sorted.get(i-1).getKey(),sorted.get(i).getKey()).setInfo("path");
+		}
+		return sorted;
 	}
-
+    
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
 		// TODO Auto-generated method stub
@@ -157,13 +227,18 @@ public class Graph_Algo implements graph_algorithms{
 	}
 
 	@Override
-	public graph copy() 
+	public graph copy()   //v
 	{
 		Collection<node_data> nodes=this.g.getV();
 		Collection<edge_data> edges=new ArrayList<>();
 		Iterator<node_data> itr=nodes.iterator();
-		while(itr.hasNext()) {
+		while(itr.hasNext())
+		{
+			try
+			{
 			edges.addAll(this.g.getE(itr.next().getKey()));
+			}
+			catch (Exception e) {}
 		}
 		graph g=new DGraph(nodes, edges);
 		return g;
@@ -200,7 +275,6 @@ public class Graph_Algo implements graph_algorithms{
 	public edgeData readSt(String s)
 	{
 		edgeData d;
-		Point3D p;
          try
         {
 		s=s.replaceAll("src:","");
@@ -230,6 +304,8 @@ public class Graph_Algo implements graph_algorithms{
         
 		s=s+this.g.toString();
 		return s;
-	}
+	} 
+
+
 
 }

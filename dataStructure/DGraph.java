@@ -96,8 +96,7 @@ public class DGraph implements graph{
 	@Override
 	public Collection<node_data> getV() 
 	{
-		return this.v.values();
-		
+		return this.v.values();		
 	}
 
 
@@ -200,7 +199,10 @@ public class DGraph implements graph{
 			  nodeData d= (nodeData) it.next().getValue();
 			  s=s+d.toString();
 		}
-	    
+		if (s.equals("nodes:"))
+		{
+			s=s+"(not nodes yet)";
+		}
 		return s;
 	}
 	public String tostringEdge()

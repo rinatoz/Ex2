@@ -6,6 +6,7 @@ import utils.Point3D;
 import utils.StdDraw;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -21,8 +22,8 @@ public class Graph_GUI extends Graph_Algo
       gA=new DGraph();
     }
     public Graph_GUI(graph g)
-    {    
-        gA=g;
+    {
+      gA=g;
     }
     public void draw(int width,int height)
     {
@@ -48,9 +49,15 @@ public class Graph_GUI extends Graph_Algo
             StdDraw.setPenRadius(0.004);
             while (it2.hasNext()) 
             {
+            	
                 StdDraw.setPenColor(StdDraw.RED);
                 StdDraw.setPenRadius(0.004);
             	edge_data e=it2.next();
+            	if (e.getInfo().equals("path"))
+            	{
+            		 StdDraw.setPenColor(StdDraw.GREEN);
+                     StdDraw.setPenRadius(0.004);
+            	}
                 double x0 = n.getLocation().x();
                 double y0 = n.getLocation().y();
                 double y1 = this.gA.getNode(e.getDest()).getLocation().y();
@@ -85,10 +92,6 @@ public class Graph_GUI extends Graph_Algo
 
         }
     }
-    public boolean isConected()
-    {
-        return this.isConnected();
-    }
     public void saveaspicture (int width,int height)
     {
     	this.draw(width, height);
@@ -100,8 +103,8 @@ public class Graph_GUI extends Graph_Algo
 		Point3D p2 = new Point3D(21, 41, 0);
 		Point3D p3 = new Point3D(62, 45, 2);
 		Point3D p4 = new Point3D(45, 45, 0);
-		Point3D p5 = new Point3D(48, 75, 0);
-		Point3D p6 = new Point3D(67, 81, 2);
+		Point3D p5 = new Point3D(48, 75, 4);
+		Point3D p6 = new Point3D(8, 75, 0);
 		nodeData n1 = new nodeData(p1,5,"",0);
 		nodeData n2 = new nodeData(p2,4,"", 0);
 		nodeData n3 = new nodeData(p3,5,"", 0);
@@ -116,16 +119,16 @@ public class Graph_GUI extends Graph_Algo
 		g.addNode(n5);
 		g.addNode(n6);
 		g.connect(n1.getKey(), n4.getKey(), 10);
-		g.connect(n1.getKey(), n3.getKey(), 1);
+		g.connect(n1.getKey(), n6.getKey(), 1);
 		g.connect(n2.getKey(), n1.getKey(), 3);
 		g.connect(n3.getKey(), n4.getKey(), 4);
 		g.connect(n5.getKey(), n6.getKey(), 6);
 	
 		Graph_Algo a=new Graph_Algo();
 		a.init(g);
-        Graph_GUI test = new Graph_GUI(g);
-           test.draw(800,600);
-             System.out.println(test.shortestPath(n1.getKey(),n4.getKey()));
+       // Graph_GUI test = new Graph_GUI(g);
+       //    test.draw(800,600);
+           //  System.out.println(test.shortestPath(n1.getKey(),n4.getKey()));
 
     }
 
