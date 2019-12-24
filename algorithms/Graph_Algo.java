@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.regex.Pattern;
-
 import dataStructure.DGraph;
 import dataStructure.edgeData;
 import dataStructure.edge_data;
@@ -29,19 +28,19 @@ public class Graph_Algo implements graph_algorithms{
 
 	public graph g;
 		
-	public Graph_Algo()  //V
+	public Graph_Algo()  
 	{
 		this.g=new DGraph();
 	}
 	
 	@Override
-	public void init(graph g) //V
+	public void init(graph g) 
 	{
 	this.g=g;	
 	}
 	
 	@Override
-	public void init(String file_name) //V
+	public void init(String file_name) 
 	{
 	       String line = "";
 	       int i=0;
@@ -113,34 +112,26 @@ public class Graph_Algo implements graph_algorithms{
 	@Override
 	public boolean isConnected()
 	{
-		int key,key2;
-       boolean ans=true;
-       Collection<node_data> col= this.g.getV();
-       Iterator<node_data> it=col.iterator();
-       Iterator<node_data> it1=col.iterator();
-	   while (it.hasNext())
-	    {
-			key=it.next().getKey();
-			while (it1.hasNext())
-			  {		     
-				key2=it1.next().getKey();
-					if (key!=key2)
-					{
-						try
-						{
-							if (this.g.getEdge(key,key2)==null)ans=false;
-							if (this.g.getEdge(key2,key)==null)ans=false;
-						}
-						catch (Exception e)
-						{
-							ans=false;
-						}
-					}
-		 	}
-			it1=col.iterator();	
-		}
+		Collection<node_data> col = g.getV();
+		Iterator<node_data> it = col.iterator();
+		while(it.hasNext()) {
+			node_data n1 = it.next();
+			Collection<node_data> col2 = g.getV();
+			Iterator<node_data> it2 = col2.iterator();
+			while(it2.hasNext()) {
+				node_data n2 = it2.next();
+				try
+				{
+				double d = shortestPathDist(n1.getKey(), n2.getKey());
+				}
+				catch (Exception e)
+				{
+					return false;
+				}
 
-       return ans;
+				}
+			}
+		return true;
 	}
 
 	@Override
@@ -150,8 +141,7 @@ public class Graph_Algo implements graph_algorithms{
 
 			Collection<node_data> vertices = this.g.getV(); // collection of nodes
 			Queue<node_data> q = new LinkedList<>();
-			try
-			{
+			ArrayList<node_data> a=new ArrayList<node_data>();
 			for (node_data node : vertices) 
 			{
 				if (node.getKey() == src)
@@ -162,11 +152,13 @@ public class Graph_Algo implements graph_algorithms{
 				{
 					node.setWeight(Double.POSITIVE_INFINITY); // note infinity the other nodes
 				}
-				q.add(node); 
+               q.add(node);
 			}
+
 			while (!q.isEmpty()) 
-			{
-				node_data tmp_src = q.poll();
+			{	
+				q=sorter(q);
+				node_data tmp_src =q.poll();
 				try {
 				Collection<edge_data> edgesTmp = this.g.getE(tmp_src.getKey());
 					for (edge_data edge : edgesTmp) 
@@ -186,8 +178,7 @@ public class Graph_Algo implements graph_algorithms{
 				throw new RuntimeException ("there is no path to this dest from this src");
 				
 			return d.getWeight();
-			}
-			catch (Exception e) {throw new RuntimeException ("there is no path to this dest from this src");}
+
 
 	}
 
@@ -227,7 +218,7 @@ public class Graph_Algo implements graph_algorithms{
 	}
 
 	@Override
-	public graph copy()   //v
+	public graph copy()   
 	{
 		Collection<node_data> nodes=this.g.getV();
 		Collection<edge_data> edges=new ArrayList<>();
@@ -244,7 +235,7 @@ public class Graph_Algo implements graph_algorithms{
 		return g;
 	}
 	
-	///////////////////////////////////////////////////////
+	///////////////////////out helpful functions////////////////////////////////
 	public nodeData readS(String s)
 	{
 		Point3D p;
@@ -271,7 +262,7 @@ public class Graph_Algo implements graph_algorithms{
 		return d;
 		
 	}
-	//
+
 	public edgeData readSt(String s)
 	{
 		edgeData d;
@@ -298,14 +289,32 @@ public class Graph_Algo implements graph_algorithms{
     	  throw new RuntimeException ("cant read edge's list");
       }
 	}
-	public String toString()
+	
+    public String toString()
 	{
 		String s="";
         
 		s=s+this.g.toString();
 		return s;
 	} 
+	
+    public Queue<node_data> sorter (Queue<node_data> q)
+	{
+      Queue<node_data> q1 = new LinkedList<node_data>();
+      Queue<node_data> q2 = new LinkedList<node_data>();
+		    while (!q.isEmpty())
+		         q1.add(q.remove());
+		          while (!q1.isEmpty())
+		          {
+		             node_data next = q1.remove();
+		              while (!q2.isEmpty() && next.getWeight() < q2.peek().getWeight())
+		                  if (next.getWeight() < q2.peek().getWeight()){
+		                   q1.add(q2.remove());}
+		                   q2.add(next);
+		            }
 
+		        return q2;
+	}
 
 
 }

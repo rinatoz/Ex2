@@ -16,6 +16,7 @@ public class DGraph implements graph{
 	 v=new HashMap<Integer,node_data>();
 	 e=new HashMap<Integer, HashMap<Integer,edge_data>>();
     }
+    
     public DGraph (	Collection<node_data> nodes,Collection<edge_data> edges)
     {
     	this.v = new HashMap<Integer, node_data>();
@@ -116,6 +117,8 @@ public class DGraph implements graph{
 	@Override
 	public node_data removeNode(int key) 
 	{
+		try
+		{
 		int keyTemp;
 		for (Entry<Integer, node_data> entry : this.v.entrySet())
 		{
@@ -139,6 +142,11 @@ public class DGraph implements graph{
 		MC++;
         
 		return this.v.remove(key);
+		}
+		catch (Exception e) 
+		{
+			throw new RuntimeException ("this node isnt exist");
+		}
 	}
 
 	@Override

@@ -48,8 +48,7 @@ public class Graph_GUI extends Graph_Algo
             StdDraw.setPenColor(StdDraw.RED);
             StdDraw.setPenRadius(0.004);
             while (it2.hasNext()) 
-            {
-            	
+            {            	
                 StdDraw.setPenColor(StdDraw.RED);
                 StdDraw.setPenRadius(0.004);
             	edge_data e=it2.next();
@@ -75,8 +74,7 @@ public class Graph_GUI extends Graph_Algo
                 StdDraw.setPenColor(StdDraw.YELLOW);
                 StdDraw.setPenRadius(0.015);
                 StdDraw.point(x1-stepX,-m*stepX+y1);
-                StdDraw.setPenColor(StdDraw.BLACK);
-                StdDraw.setPenRadius(0.004);
+
             }
             
         	}
@@ -97,39 +95,6 @@ public class Graph_GUI extends Graph_Algo
     	this.draw(width, height);
     	StdDraw.save("Draw_functions.jpg"); //save the draw as a jpg file
     }
-    public static void main(String[] args)
-    {
-		Point3D p1 = new Point3D(10, 20, 0);
-		Point3D p2 = new Point3D(21, 41, 0);
-		Point3D p3 = new Point3D(62, 45, 2);
-		Point3D p4 = new Point3D(45, 45, 0);
-		Point3D p5 = new Point3D(48, 75, 4);
-		Point3D p6 = new Point3D(8, 75, 0);
-		nodeData n1 = new nodeData(p1,5,"",0);
-		nodeData n2 = new nodeData(p2,4,"", 0);
-		nodeData n3 = new nodeData(p3,5,"", 0);
-		nodeData n4 = new nodeData(p4,5,"",0);
-		nodeData n5 = new nodeData(p5,5,"", 0);
-		nodeData n6 = new nodeData(p6,5,"", 0);
-		graph g = new DGraph();
-		g.addNode(n1);
-		g.addNode(n2);
-		g.addNode(n3);
-		g.addNode(n4);
-		g.addNode(n5);
-		g.addNode(n6);
-		g.connect(n1.getKey(), n4.getKey(), 10);
-		g.connect(n1.getKey(), n6.getKey(), 1);
-		g.connect(n2.getKey(), n1.getKey(), 3);
-		g.connect(n3.getKey(), n4.getKey(), 4);
-		g.connect(n5.getKey(), n6.getKey(), 6);
-	
-		Graph_Algo a=new Graph_Algo();
-		a.init(g);
-       // Graph_GUI test = new Graph_GUI(g);
-       //    test.draw(800,600);
-           //  System.out.println(test.shortestPath(n1.getKey(),n4.getKey()));
 
-    }
 
 }
