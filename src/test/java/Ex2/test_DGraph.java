@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.xml.crypto.NodeSetData;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

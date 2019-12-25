@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -14,8 +15,6 @@ import org.junit.Test;
 
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
-import dataStructure.edgeData;
-import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.nodeData;
 import dataStructure.node_data;
@@ -64,7 +63,7 @@ public class test_Graph_Algo {
 		g.addNode(n3);
 		g.connect(n1.getKey(), n2.getKey(), 2);
 		g.connect(n2.getKey(), n3.getKey(), 3);
-		 a=new Graph_Algo();
+	     a=new Graph_Algo();
 		a.init(g);
 		a.save("graph");
 		s=a.toString();
@@ -194,8 +193,54 @@ public class test_Graph_Algo {
 	}
 
 	@Test
-	public void test_TSP() {
-		//fail("Not yet implemented");
+	public void test_TSP() 
+	{
+		Point3D p1 = new Point3D(10, 20, 0);
+		Point3D p2 = new Point3D(21, 41, 0);
+		Point3D p3 = new Point3D(62, 78, 2);
+		Point3D p4 = new Point3D(45, 34, 0);
+		Point3D p5 = new Point3D(48, 75, 0);
+		Point3D p6 = new Point3D(67, 81, 2);
+		Point3D p7 = new Point3D(75, 81, 2);
+		nodeData n1 = new nodeData(p1,0,"",0);
+		nodeData n2 = new nodeData(p2,0,"", 0);
+		nodeData n3 = new nodeData(p3,0,"", 0);
+		nodeData n4 = new nodeData(p4,0,"",0);
+		nodeData n5 = new nodeData(p5,0,"", 0);
+		nodeData n6 = new nodeData(p6,0,"", 0);
+		nodeData n7 = new nodeData(p7,0,"", 0);
+
+		graph g = new DGraph();
+		g.addNode(n1);
+		g.addNode(n2);
+		g.addNode(n3);
+		g.addNode(n4);
+		g.addNode(n5);
+		g.addNode(n6);
+		g.addNode(n7);
+		g.connect(n1.getKey(), n2.getKey(), 10);
+		g.connect(n1.getKey(), n4.getKey(), 1);
+		g.connect(n3.getKey(), n5.getKey(), 1);
+		g.connect(n5.getKey(), n4.getKey(), 3);
+		g.connect(n4.getKey(), n3.getKey(), 3);
+		g.connect(n4.getKey(), n7.getKey(), 2);
+		g.connect(n5.getKey(), n6.getKey(), 4);
+		g.connect(n3.getKey(), n6.getKey(), 1);
+		g.connect(n3.getKey(), n7.getKey(), 6);
+		g.connect(n6.getKey(), n7.getKey(), 1);			
+        Graph_GUI test = new Graph_GUI(g);
+        test.init(g);
+        ArrayList<Integer> target= new ArrayList<Integer>();
+        target.add(n1.getKey());
+        target.add(n2.getKey());
+        target.add(n3.getKey());
+        target.add(n4.getKey());
+       List<node_data> ans2= test.TSP(target);
+       assertEquals(n1.getKey(),ans2.get(0).getKey());
+       assertEquals(n2.getKey(),ans2.get(1).getKey());
+       assertEquals(n3.getKey(),ans2.get(2).getKey());
+       assertEquals(n5.getKey(),ans2.get(3).getKey());
+       assertEquals(n4.getKey(),ans2.get(4).getKey());
 	}
 
 	@Test
@@ -228,7 +273,6 @@ public class test_Graph_Algo {
 			int key=it.next().getKey();
 			try //cases that there are edges in the graph
 			{
-				String s=copy.getE(key).toString();
 				assertEquals(copy.getE(key).toString(),g.getE(key).toString());
 			}
 			catch (Exception e) {} 

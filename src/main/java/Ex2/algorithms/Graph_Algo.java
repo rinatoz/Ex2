@@ -122,7 +122,7 @@ public class Graph_Algo implements graph_algorithms{
 				node_data n2 = it2.next();
 				try
 				{
-				double d = shortestPathDist(n1.getKey(), n2.getKey());
+				shortestPathDist(n1.getKey(), n2.getKey());
 				}
 				catch (Exception e)
 				{
@@ -137,11 +137,11 @@ public class Graph_Algo implements graph_algorithms{
 	@Override
 	public double shortestPathDist(int src, int dest)
 	{
-		node_data d=this.g.getNode(dest);
-
+		try
+		{
+		   node_data d=this.g.getNode(dest);
 			Collection<node_data> vertices = this.g.getV(); // collection of nodes
 			Queue<node_data> q = new LinkedList<>();
-			ArrayList<node_data> a=new ArrayList<node_data>();
 			for (node_data node : vertices) 
 			{
 				if (node.getKey() == src)
@@ -178,6 +178,11 @@ public class Graph_Algo implements graph_algorithms{
 				throw new RuntimeException ("there is no path to this dest from this src");
 				
 			return d.getWeight();
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException ("there is no path to this dest from this src");
+		}
 
 
 	}
@@ -204,17 +209,41 @@ public class Graph_Algo implements graph_algorithms{
 			sorted.add(first.get(i));
 		}
 
-		for (int i=1;i<sorted.size();i++)
-		{
-			this.g.getEdge(sorted.get(i-1).getKey(),sorted.get(i).getKey()).setInfo("path");
-		}
 		return sorted;
 	}
     
 	@Override
-	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<node_data> TSP(List<Integer> targets) 
+	{
+		ArrayList<node_data> tar = new ArrayList<node_data>();
+		ArrayList<node_data> ans = new ArrayList<node_data>();
+		Iterator<Integer> it = targets.iterator();
+		while(it.hasNext()) {
+			int key = it.next();
+			if(g.getNode(key)==null) {
+				return null;
+			}
+			tar.add(g.getNode(key));
+		}
+
+		for(int i = 0; i<tar.size()-1; i++) 
+		{
+			try
+			{
+			ArrayList<node_data> temp = (ArrayList<node_data>) shortestPath(tar.get(i).getKey(), tar.get(i+1).getKey());
+			for(int j =0; j<temp.size(); j++)
+			{
+				if(!ans.contains(temp.get(j)))
+					ans.add(temp.get(j));
+			}
+			}
+			catch (Exception e)
+			{
+				
+			}
+		}
+		return ans;	
+	
 	}
 
 	@Override
@@ -315,6 +344,7 @@ public class Graph_Algo implements graph_algorithms{
 
 		        return q2;
 	}
+
 
 
 }
