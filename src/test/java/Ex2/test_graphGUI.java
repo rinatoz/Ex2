@@ -1,6 +1,14 @@
 package test;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import dataStructure.DGraph;
 import dataStructure.graph;
@@ -8,10 +16,26 @@ import dataStructure.nodeData;
 import gui.Graph_GUI;
 import utils.Point3D;
 
-public class test_GUI
-{
+public class test_graphGUI {
 
-	public static void main(String[] args) 
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testGraphwindows()
 	{
 		Point3D p1 = new Point3D(10, 20, 0);
 		Point3D p2 = new Point3D(21, 41, 0);
@@ -56,4 +80,5 @@ public class test_GUI
         test.isconnected_gui();
         test.shortestPath_gui(n1.getKey(),n6.getKey());
 	}
+
 }
