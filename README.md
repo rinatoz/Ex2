@@ -1,4 +1,4 @@
-#THE MAZE OF WAZE
+# THE MAZE OF WAZE
 
 ## written on Eclipse
 
