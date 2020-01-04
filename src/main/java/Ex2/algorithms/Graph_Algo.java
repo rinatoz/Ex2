@@ -32,6 +32,10 @@ public class Graph_Algo implements graph_algorithms{
 	{
 		this.g=new DGraph();
 	}
+	public Graph_Algo(graph g)  
+	{
+		this.g=g;
+	}
 	
 	@Override
 	public void init(graph g) 
@@ -215,34 +219,35 @@ public class Graph_Algo implements graph_algorithms{
 	@Override
 	public List<node_data> TSP(List<Integer> targets) 
 	{
-		ArrayList<node_data> tar = new ArrayList<node_data>();
-		ArrayList<node_data> ans = new ArrayList<node_data>();
-		Iterator<Integer> it = targets.iterator();
-		while(it.hasNext()) {
-			int key = it.next();
-			if(g.getNode(key)==null) {
-				return null;
-			}
-			tar.add(g.getNode(key));
-		}
-
-		for(int i = 0; i<tar.size()-1; i++) 
+		if(!this.isConnected())
+			return null;
+		List<node_data> TSP=new ArrayList<node_data>();
+		int indexSrc=(int)(Math.random()*targets.size());//start from random vertex in the list
+		int src=targets.get(indexSrc);
+		targets.remove(indexSrc);
+		int dest=0,indexDest=0;
+		TSP.add(g.getNode(src));
+		while(targets.size()>0) 
 		{
-			try
+			double min=Double.POSITIVE_INFINITY;
+			for(int j=0;j<targets.size();j++) //find the vertex that is the closest to src
 			{
-			ArrayList<node_data> temp = (ArrayList<node_data>) shortestPath(tar.get(i).getKey(), tar.get(i+1).getKey());
-			for(int j =0; j<temp.size(); j++)
+				if(this.shortestPathDist(src, targets.get(j))<min) 
+				{
+					min=this.shortestPathDist(src, targets.get(j));
+					dest=targets.get(j);
+					indexDest=j;
+				}
+			}
+			List<node_data> temp=this.shortestPath(src, dest);
+			for(int j=1;j<temp.size();j++) //add the vertices from i to i+1 to the list
 			{
-				if(!ans.contains(temp.get(j)))
-					ans.add(temp.get(j));
+				TSP.add(temp.get(j));
 			}
-			}
-			catch (Exception e)
-			{
-				
-			}
+			src=dest;
+			targets.remove(indexDest);
 		}
-		return ans;	
+		return TSP;
 	
 	}
 

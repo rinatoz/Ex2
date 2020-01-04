@@ -22,9 +22,14 @@ import gui.Graph_GUI;
 import utils.Point3D;
 
 public class test_Graph_Algo {
+	
+	public static graph g=new DGraph();
+	public static Graph_Algo ga=new Graph_Algo();
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	public static void setUpBeforeClass() throws Exception 
+	{
+
 	}
 
 	@AfterClass
@@ -195,52 +200,33 @@ public class test_Graph_Algo {
 	@Test
 	public void test_TSP() 
 	{
-		Point3D p1 = new Point3D(10, 20, 0);
-		Point3D p2 = new Point3D(21, 41, 0);
-		Point3D p3 = new Point3D(62, 78, 2);
-		Point3D p4 = new Point3D(45, 34, 0);
-		Point3D p5 = new Point3D(48, 75, 0);
-		Point3D p6 = new Point3D(67, 81, 2);
-		Point3D p7 = new Point3D(75, 81, 2);
-		nodeData n1 = new nodeData(p1,0,"",0);
-		nodeData n2 = new nodeData(p2,0,"", 0);
-		nodeData n3 = new nodeData(p3,0,"", 0);
-		nodeData n4 = new nodeData(p4,0,"",0);
-		nodeData n5 = new nodeData(p5,0,"", 0);
-		nodeData n6 = new nodeData(p6,0,"", 0);
-		nodeData n7 = new nodeData(p7,0,"", 0);
-
-		graph g = new DGraph();
-		g.addNode(n1);
-		g.addNode(n2);
-		g.addNode(n3);
-		g.addNode(n4);
-		g.addNode(n5);
-		g.addNode(n6);
-		g.addNode(n7);
-		g.connect(n1.getKey(), n2.getKey(), 10);
-		g.connect(n1.getKey(), n4.getKey(), 1);
-		g.connect(n3.getKey(), n5.getKey(), 1);
-		g.connect(n5.getKey(), n4.getKey(), 3);
-		g.connect(n4.getKey(), n3.getKey(), 3);
-		g.connect(n4.getKey(), n7.getKey(), 2);
-		g.connect(n5.getKey(), n6.getKey(), 4);
-		g.connect(n3.getKey(), n6.getKey(), 1);
-		g.connect(n3.getKey(), n7.getKey(), 6);
-		g.connect(n6.getKey(), n7.getKey(), 1);			
-        Graph_GUI test = new Graph_GUI(g);
-        test.init(g);
-        ArrayList<Integer> target= new ArrayList<Integer>();
-        target.add(n1.getKey());
-        target.add(n2.getKey());
-        target.add(n3.getKey());
-        target.add(n4.getKey());
-       List<node_data> ans2= test.TSP(target);
-       assertEquals(n1.getKey(),ans2.get(0).getKey());
-       assertEquals(n2.getKey(),ans2.get(1).getKey());
-       assertEquals(n3.getKey(),ans2.get(2).getKey());
-       assertEquals(n5.getKey(),ans2.get(3).getKey());
-       assertEquals(n4.getKey(),ans2.get(4).getKey());
+		ga.init(g);
+		for(int i=0;i<5;i++)
+		{
+		Point3D p=new Point3D(i,i,i);
+		node_data a=new nodeData(i);
+		g.addNode(a);
+		}
+		g.connect(0,1,2);
+		g.connect(3,0,12);
+		g.connect(0,3,12);
+		g.connect(1,2,7);
+		g.connect(1,4,5); 
+		g.connect(2,4,1);
+		g.connect(4,3,3);
+		g.connect(2,3,3);
+		List<Integer> send=new ArrayList <Integer>();
+		send.add(0);send.add(1);send.add(4);send.add(3);
+		List<node_data> actualnode=new ArrayList  <node_data>();
+		System.out.println(ga.isConnected());
+		actualnode=ga.TSP(send);
+		List<Integer> actual=new ArrayList <Integer>();
+		for(int i=0;i<actualnode.size();i++)
+		{
+			actual.add(actualnode.get(i).getKey());
+			System.out.println(actualnode.get(i).getKey());
+		}
+		
 	}
 
 	@Test
